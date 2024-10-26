@@ -1,14 +1,13 @@
-# Utilizarea unei imagini openjdk ca bază
-FROM openjdk:17-jdk-slim
-
-# Setarea directorului de lucru în container
+# Step 1: Use Maven to build the JAR file
+FROM maven:3.8.4-openjdk-17 AS build
 WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Copierea fișierului JAR generat în directorul de lucru
-COPY target/eureka-server-0.0.1-SNAPSHOT.jar eureka-server.jar
+# Step 2: Use a JRE image to run the application
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=build /app/target/eureka-server-0.0.1-SNAPSHOT.jar app.jar
 
-# Expunerea portului pe care va rula Eureka
 EXPOSE 8761
-
-# Comanda de rulare a aplicației
-ENTRYPOINT ["java", "-jar", "eureka-server.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
