@@ -7,7 +7,7 @@ on:
 
 jobs:
   build_and_deploy:
-    runs-on: self-hosted  # Rulează pe runner-ul configurat pe Raspberry Pi 4
+    runs-on: [self-hosted, Linux, ARM64] # Rulează pe runner-ul configurat pe Raspberry Pi 4, utilizând toate etichetele
 
     steps:
       - name: Checkout repository
