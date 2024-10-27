@@ -40,15 +40,15 @@ jobs:
           # Salvează imaginea Docker într-un fișier .tar
           docker save eureka-server:latest -o eureka-server.tar
           
-          # Transferă fișierul .tar pe Raspberry Pi 5
-          scp -i ~/.ssh/id_rsa -P 15621 eureka-server.tar antonio@antonio-dev.go.ro:/home/pi/
+          # Transferă fișierul .tar pe Raspberry Pi 5 în /home/antonio/
+          scp -i ~/.ssh/id_rsa -P 15621 eureka-server.tar antonio@antonio-dev.go.ro:/home/antonio/
 
       - name: Load image and deploy on Raspberry Pi 5
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           ssh -i ~/.ssh/id_rsa -p 15621 antonio@antonio-dev.go.ro "
-             docker load -i /home/pi/eureka-server.tar
+             docker load -i /home/antonio/eureka-server.tar
           "
 
       - name: Clean up Docker images and tar files on Raspberry Pi 4
